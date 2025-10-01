@@ -1,0 +1,10 @@
+config:
+  target: "{{target}}"
+  phases:
+    - duration: { { duration } }
+      arrivalRate: { { arrivalRate } }
+scenarios:
+  - name: steady
+    flow:
+      - get: { url: "/health" }
+      - get: { url: "/items/123" }

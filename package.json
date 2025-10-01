@@ -1,0 +1,40 @@
+{
+  "name": "serverless-framework-benchmark",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "npm i && cd infra && npm i && cd ..",
+    "build": "node scripts/esbuild.cjs",
+    "cdk:bootstrap": "set -e; ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text); if [ -z \"$ACCOUNT_ID\" ]; then echo 'No AWS account id. Set AWS_PROFILE or login.' && exit 1; fi; REGION=${AWS_REGION:-eu-central-1}; export CDK_DEFAULT_ACCOUNT=$ACCOUNT_ID; export CDK_DEFAULT_REGION=$REGION; cd infra && npx cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION",
+    "cdk:deploy": "cd infra && npx cdk deploy --require-approval never",
+    "cdk:destroy": "cd infra && npx cdk destroy --force",
+    "bench": "npm run build && npm run cdk:deploy && node --loader ts-node/esm bench/orchestrator.ts",
+    "clean": "rm -rf dist .cdk.out infra/cdk-outputs.json reports && find . -name 'node_modules' -maxdepth 2 -type d -prune -exec rm -rf {} +"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "aws-cdk": "^2.149.0",
+    "aws-cdk-lib": "^2.149.0",
+    "constructs": "^10.3.0",
+    "dotenv": "^16.4.5",
+    "esbuild": "^0.23.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4",
+    "artillery": "^2.0.0-34"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.637.0",
+    "@aws-sdk/client-lambda": "^3.637.0",
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "@vendia/serverless-express": "^4.12.6",
+    "express": "^4.19.2",
+    "fastify": "^4.28.1",
+    "@fastify/aws-lambda": "^4.0.2",
+    "node-fetch": "^3.3.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "yaml": "^2.5.1"
+  }
+}
