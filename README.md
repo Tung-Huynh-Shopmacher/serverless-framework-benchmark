@@ -9,7 +9,9 @@
 ## One-time
 
 cp .env.example .env
+
 npm run setup
+
 npm run cdk:bootstrap
 
 ## Build + Deploy + Auto-Benchmark
